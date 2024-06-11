@@ -24,5 +24,6 @@
     "all": "npm run build && npm run test && npm run test-coverage && npm run pack"
   },
   "author": "Nishu Bansal",
+  "contributors": ["Sebastien Legare <slegare@gmail.com>"],
   "license": "MIT"
 }
