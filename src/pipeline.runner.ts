@@ -51,6 +51,7 @@ export class PipelineRunner {
     public async RunYamlPipeline(webApi: azdev.WebApi): Promise<any> {
         let projectName = UrlParser.GetProjectName(this.taskParameters.azureDevopsProjectUrl);
         let pipelineName = this.taskParameters.azurePipelineName;
+        let buildNumber = this.taskParameters.azurePipelineBuildNumber;
         let buildApi = await webApi.getBuildApi();
 
         // Get matching build definitions for the given project and pipeline name
@@ -96,6 +97,10 @@ export class PipelineRunner {
         } as BuildInterfaces.Build;
 
         log.LogPipelineTriggerInput(build);
+
+        if (buildNumber) {
+          build.buildNumber = buildNumber
+        }
 
         // Queue build
         let buildQueueResult = await buildApi.queueBuild(build, build.project.id, true);

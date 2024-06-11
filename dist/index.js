@@ -164,6 +164,7 @@ class PipelineRunner {
         return __awaiter(this, void 0, void 0, function* () {
             let projectName = url_parser_1.UrlParser.GetProjectName(this.taskParameters.azureDevopsProjectUrl);
             let pipelineName = this.taskParameters.azurePipelineName;
+            let buildNumber = this.taskParameters.azurePipelineBuildNumber;
             let buildApi = yield webApi.getBuildApi();
             // Get matching build definitions for the given project and pipeline name
             const buildDefinitions = yield buildApi.getDefinitions(projectName, pipelineName);
@@ -201,6 +202,9 @@ class PipelineRunner {
                 parameters: this.taskParameters.azurePipelineVariables
             };
             logger_1.Logger.LogPipelineTriggerInput(build);
+            if (buildNumber) {
+                build.buildNumber = buildNumber;
+            }
             // Queue build
             let buildQueueResult = yield buildApi.queueBuild(build, build.project.id, true);
             if (buildQueueResult != null) {
@@ -323,6 +327,7 @@ class TaskParameters {
         this._azurePipelineName = core.getInput('azure-pipeline-name', { required: true });
         this._azureDevopsToken = core.getInput('azure-devops-token', { required: true });
         this._azurePipelineVariables = core.getInput('azure-pipeline-variables', { required: false });
+        this._azurePipelineBuildNumber = core.getInput('azure-pipeline-build-number', { required: false });
     }
     static getTaskParams() {
         if (!this.taskparams) {
@@ -341,6 +346,9 @@ class TaskParameters {
     }
     get azurePipelineVariables() {
         return this._azurePipelineVariables;
+    }
+    get azurePipelineBuildNumber() {
+        return this._azurePipelineBuildNumber;
     }
 }
 exports.TaskParameters = TaskParameters;

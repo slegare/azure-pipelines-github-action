@@ -6,12 +6,14 @@ export class TaskParameters {
     private _azurePipelineName: string;
     private _azureDevopsToken: string;
     private _azurePipelineVariables: string;
+    private _azurePipelineBuildNumber: string;
 
     private constructor() {
         this._azureDevopsProjectUrl = core.getInput('azure-devops-project-url', { required: true });
         this._azurePipelineName = core.getInput('azure-pipeline-name', { required: true });
         this._azureDevopsToken = core.getInput('azure-devops-token', { required: true });
         this._azurePipelineVariables = core.getInput('azure-pipeline-variables', { required: false });
+        this._azurePipelineBuildNumber = core.getInput('azure-pipeline-build-number', { required: false });
     }
 
     public static getTaskParams() {
@@ -37,4 +39,8 @@ export class TaskParameters {
     public get azurePipelineVariables() {
         return this._azurePipelineVariables;
     }
+
+    public get azurePipelineBuildNumber() {
+      return this._azurePipelineBuildNumber;
+  }
 }
